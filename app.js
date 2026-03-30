@@ -15,7 +15,7 @@ async function search() {
         const res = await fetch("https://api.dify.ai/v1/workflows/run", {
             method: "POST",
             headers: {
-                Authorization: `Bearer ${process.env.DIFY_API_KEY}`,
+                Authorization: "Bearer app-laY1BIEQpB1r9JVg2QMKyCxW",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
