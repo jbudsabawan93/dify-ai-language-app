@@ -41,7 +41,7 @@ async function search() {
         document.getElementById("phonetic_ja").innerText = r.phonetic_ja;
 
         document.getElementById("image").src =
-            `https://source.unsplash.com/600x400/?${encodeURIComponent(r.image_keyword)}`;
+            `https://picsum.photos/600/400?random=${encodeURIComponent(r.image_keyword)}`;
     } catch (err) {
         alert("เกิดข้อผิดพลาด");
         console.error(err);
