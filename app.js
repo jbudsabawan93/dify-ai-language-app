@@ -1,6 +1,6 @@
 let voices = [];
+const DEFAULT_IMAGE = "no-image.jpg";
 
-// โหลด voice
 speechSynthesis.onvoiceschanged = () => {
     voices = speechSynthesis.getVoices();
 };
@@ -10,12 +10,12 @@ async function search() {
     if (!word) return;
 
     document.getElementById("loading").style.display = "block";
+    document.getElementById("image").src = DEFAULT_IMAGE;
 
     try {
-        const res = await fetch("https://api.dify.ai/v1/workflows/run", {
+        const res = await fetch("/api/dify", {
             method: "POST",
             headers: {
-                Authorization: "Bearer app-laY1BIEQpB1r9JVg2QMKyCxW",
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -40,8 +40,7 @@ async function search() {
         document.getElementById("phonetic_en").innerText = r.phonetic_en;
         document.getElementById("phonetic_ja").innerText = r.phonetic_ja;
 
-        document.getElementById("image").src =
-            `https://picsum.photos/600/400?random=${encodeURIComponent(r.image_keyword)}`;
+        document.getElementById("image").src = r.image || DEFAULT_IMAGE;
     } catch (err) {
         alert("เกิดข้อผิดพลาด");
         console.error(err);
