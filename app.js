@@ -20,6 +20,14 @@ speechSynthesis.onvoiceschanged = () => {
     voices = speechSynthesis.getVoices();
 };
 
+function isWordNotFoundError(payload) {
+    return (
+        payload &&
+        String(payload.error).toLowerCase() === "true" &&
+        payload.message === "word not found"
+    );
+}
+
 async function search() {
     const word = document.getElementById("inputWord").value.trim();
     if (!word) return;
@@ -52,9 +60,14 @@ async function search() {
             throw new Error(data.error || `API request failed (${res.status})`);
         }
 
-        const r = data?.data?.outputs;
+        const r = data?.data?.outputs || data?.outputs || data;
         if (!r) {
             throw new Error("Invalid API response: outputs not found");
+        }
+        if (isWordNotFoundError(r)) {
+            clearData();
+            document.getElementById("inputWord").value = word;
+            throw new Error("word not found");
         }
 
         document.getElementById("word_th").innerText = r.word_th;
