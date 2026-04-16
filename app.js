@@ -111,3 +111,29 @@ function closeImageModal() {
     imageModalEl.classList.remove("show");
     modalImageEl.src = "";
 }
+
+function clearData() {
+    document.getElementById("inputWord").value = "";
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("image").src = DEFAULT_IMAGE;
+
+    const textIds = [
+        "word_th",
+        "word_en",
+        "word_ja",
+        "meaning_th",
+        "meaning_en",
+        "meaning_ja",
+        "phonetic_th",
+        "phonetic_en",
+        "phonetic_ja",
+    ];
+
+    textIds.forEach((id) => {
+        document.getElementById(id).innerText = "";
+    });
+
+    closeImageModal();
+    speechSynthesis.cancel();
+    document.getElementById("inputWord").focus();
+}
