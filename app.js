@@ -6,27 +6,41 @@ speechSynthesis.onvoiceschanged = () => {
 };
 
 async function search() {
-    const word = document.getElementById("inputWord").value;
+    const word = document.getElementById("inputWord").value.trim();
     if (!word) return;
 
     document.getElementById("loading").style.display = "block";
     document.getElementById("image").src = DEFAULT_IMAGE;
 
     try {
+        if (location.hostname.endsWith("github.io")) {
+            throw new Error("GitHub Pages does not support local /api POST endpoints.");
+        }
+
         const res = await fetch("/api/dify", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                inputs: { word: word },
-                response_mode: "blocking",
-                user: "web-user",
+                word,
             }),
         });
 
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+            throw new Error("API response is not JSON");
+        }
+
         const data = await res.json();
-        const r = data.data.outputs;
+        if (!res.ok) {
+            throw new Error(data.error || `API request failed (${res.status})`);
+        }
+
+        const r = data?.data?.outputs;
+        if (!r) {
+            throw new Error("Invalid API response: outputs not found");
+        }
 
         document.getElementById("word_th").innerText = r.word_th;
         document.getElementById("word_en").innerText = r.word_en;
@@ -42,7 +56,7 @@ async function search() {
 
         document.getElementById("image").src = r.image || DEFAULT_IMAGE;
     } catch (err) {
-        alert("เกิดข้อผิดพลาด");
+        alert(`เกิดข้อผิดพลาด: ${err.message}`);
         console.error(err);
     }
 

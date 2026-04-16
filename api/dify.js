@@ -8,7 +8,8 @@ module.exports = async function handler(req, res) {
     }
 
     try {
-        const { word } = req.body || {};
+        const body = req.body || {};
+        const word = body.word || body.inputs?.word;
         if (!word) {
             return res.status(400).json({ error: "word is required" });
         }
