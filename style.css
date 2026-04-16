@@ -45,13 +45,15 @@ h2 {
 }
 
 .card img {
-    width: 500px;
-    height: 300px;
-    object-fit: cover;
+    width: min(100%, 500px);
+    height: min(50vh, 320px);
+    object-fit: contain;
     object-position: center center;
     display: block;
     margin: 0 auto 15px;
     border-radius: 12px;
+    cursor: zoom-in;
+    background: #f3f3f3;
 }
 
 .lang {
@@ -79,4 +81,30 @@ hr {
 .loading {
     text-align: center;
     display: none;
+}
+
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    cursor: zoom-out;
+}
+
+.image-modal.show {
+    display: flex;
+}
+
+.image-modal-content {
+    max-width: min(92vw, 1200px);
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #111;
 }

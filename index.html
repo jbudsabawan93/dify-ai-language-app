@@ -22,7 +22,7 @@
             <div class="loading" id="loading">⏳ กำลังโหลด...</div>
 
             <div class="card">
-                <img id="image" src="no-image.jpg" />
+                <img id="image" src="no-image.jpg" alt="Vocabulary image" />
 
                 <div class="lang">
                     <b>ภาษาไทย:</b> <span id="word_th"></span><br />
@@ -49,6 +49,10 @@
                     <button onclick="speak('ja')">🔊 押して聞く</button>
                 </div>
             </div>
+        </div>
+
+        <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+            <img id="modalImage" class="image-modal-content" alt="Full size image" />
         </div>
 
         <script src="app.js"></script>

@@ -1,5 +1,20 @@
 let voices = [];
 const DEFAULT_IMAGE = "no-image.jpg";
+const imageEl = document.getElementById("image");
+const imageModalEl = document.getElementById("imageModal");
+const modalImageEl = document.getElementById("modalImage");
+
+if (imageEl) {
+    imageEl.addEventListener("click", () => {
+        if (!imageEl.src || imageEl.src.includes(DEFAULT_IMAGE)) return;
+        modalImageEl.src = imageEl.src;
+        imageModalEl.classList.add("show");
+    });
+}
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeImageModal();
+});
 
 speechSynthesis.onvoiceschanged = () => {
     voices = speechSynthesis.getVoices();
@@ -90,4 +105,9 @@ function speak(lang) {
 
     speechSynthesis.cancel();
     speechSynthesis.speak(utter);
+}
+
+function closeImageModal() {
+    imageModalEl.classList.remove("show");
+    modalImageEl.src = "";
 }
