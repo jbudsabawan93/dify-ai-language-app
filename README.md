@@ -4,7 +4,7 @@ AI Vocabulary is a multilingual vocabulary web app (Thai / English / Japanese) p
 
 ## Demo
 
-- Live demo: [https://dify-ai-language-app.vercel.app/](https://dify-ai-language-app.vercel.app/)
+- Live demo: [Demo](https://dify-ai-language-app.vercel.app/)
 
 ## Features
 
