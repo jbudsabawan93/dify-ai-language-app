@@ -1,5 +1,5 @@
 let voices = [];
-const DEFAULT_IMAGE = "no-image.jpg";
+const DEFAULT_IMAGE = "asset/images/no-image.jpg";
 const imageEl = document.getElementById("image");
 const imageModalEl = document.getElementById("imageModal");
 const modalImageEl = document.getElementById("modalImage");
