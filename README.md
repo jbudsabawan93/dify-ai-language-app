@@ -2,6 +2,10 @@
 
 AI Vocabulary is a multilingual vocabulary web app (Thai / English / Japanese) powered by a Dify workflow through a Vercel Serverless Function.
 
+## Demo
+
+- Live demo: [https://dify-ai-language-app.vercel.app/](https://dify-ai-language-app.vercel.app/)
+
 ## Features
 
 - Search vocabulary from an input box
@@ -10,6 +14,12 @@ AI Vocabulary is a multilingual vocabulary web app (Thai / English / Japanese) p
 - Play TTS pronunciation for each language
 - Click image to preview full size (modal)
 - Clear button to reset all displayed results
+
+## Screenshot
+
+![AI Vocabulary Screenshot](./Screenshot.png)
+
+The app interface includes a search input and shows vocabulary results in three languages (Thai / English / Japanese), including the word, phonetic, meaning, TTS play buttons, and an image preview in a single view.
 
 ## Tech Stack
 
@@ -40,6 +50,62 @@ AI Vocabulary is a multilingual vocabulary web app (Thai / English / Japanese) p
 
 - Workflow name: `AI Vocabulary`
 - User value: `web-user`
+
+### Flow Diagram
+
+![Dify Workflow Flow](./Screenshot-dify-flow.png)
+
+This flow accepts one input word, analyzes it, fetches a related image candidate, formats the final payload in a code node, and returns structured output fields to the frontend.
+
+### System Prompt
+
+```txt
+You are a dictionary AI.
+
+STRICT RULES:
+- Return ONLY valid JSON
+- DO NOT include any explanation
+- DO NOT add extra fields
+- DO NOT return null
+- Fill ALL fields
+- Use "-" if unknown
+
+Output format:
+
+{
+ "word_en":"",
+ "word_th":"",
+ "word_ja":"",
+
+ "meaning_th":"",
+ "meaning_en":"",
+ "meaning_ja":"",
+
+ "phonetic_th":"",
+ "phonetic_en":"",
+ "phonetic_ja":"",
+
+ "image_keyword":"",
+ "tts_lang":""
+}
+
+If the input word is invalid, unknown, empty, or not a single word, return exactly:
+{
+ "error":"true",
+ "message":"word not found"
+}
+Do not return any other keys.
+```
+
+### User Prompt
+
+```txt
+User gives ONE word: {{word}}
+
+The word can be Thai, English, or Japanese.
+
+Translate and fill all fields.
+```
 
 ## Expected Dify Success Output
 

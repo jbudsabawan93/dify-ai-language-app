@@ -3,6 +3,7 @@ const DEFAULT_IMAGE = "no-image.jpg";
 const imageEl = document.getElementById("image");
 const imageModalEl = document.getElementById("imageModal");
 const modalImageEl = document.getElementById("modalImage");
+let warmupPromise = null;
 
 if (imageEl) {
     imageEl.addEventListener("click", () => {
@@ -28,6 +29,28 @@ function isWordNotFoundError(payload) {
     );
 }
 
+async function warmupServer() {
+    if (location.hostname.endsWith("github.io")) return;
+    if (warmupPromise) return warmupPromise;
+
+    warmupPromise = fetch("/api/dify", {
+        method: "GET",
+        cache: "no-store",
+    }).catch(() => null);
+
+    return warmupPromise;
+}
+
+async function postDify(word) {
+    return fetch("/api/dify", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ word }),
+    });
+}
+
 async function search() {
     const word = document.getElementById("inputWord").value.trim();
     if (!word) return;
@@ -40,15 +63,13 @@ async function search() {
             throw new Error("GitHub Pages does not support local /api POST endpoints.");
         }
 
-        const res = await fetch("/api/dify", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                word,
-            }),
-        });
+        await warmupServer();
+
+        let res = await postDify(word);
+        if (!res.ok && res.status >= 500) {
+            await warmupServer();
+            res = await postDify(word);
+        }
 
         const contentType = res.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {
@@ -150,3 +171,5 @@ function clearData() {
     speechSynthesis.cancel();
     document.getElementById("inputWord").focus();
 }
+
+warmupServer();
