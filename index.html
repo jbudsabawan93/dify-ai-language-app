@@ -1,55 +1,111 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>AI Vocabulary</title>
         <link
             rel="icon"
             href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='0.9em' font-size='52'%3E%F0%9F%93%98%3C/text%3E%3C/svg%3E"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
         <link rel="stylesheet" href="style.css" />
     </head>
 
     <body>
+        <div class="bg" aria-hidden="true"></div>
+
         <div class="container">
-            <h2>📘 AI Vocabulary</h2>
+            <header class="hero">
+                <p class="badge">EN · TH · JA</p>
+                <h1>AI Vocabulary</h1>
+                <p class="subtitle">Look up a word with pronunciation, meaning, and audio in 3 languages</p>
+            </header>
 
-            <div class="search">
-                <input id="inputWord" placeholder="พิมพ์คำศัพท์..." />
-                <button onclick="search()">search</button>
-                <button class="btn-clear" onclick="clearData()">clear</button>
+            <form class="search" onsubmit="event.preventDefault(); search();">
+                <label class="search-field">
+                    <span class="search-icon" aria-hidden="true">⌕</span>
+                    <input id="inputWord" type="text" placeholder="Search a word, e.g. cat, แมว, 猫" autocomplete="off" />
+                </label>
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button type="button" class="btn btn-ghost" onclick="clearData()">Clear</button>
+            </form>
+
+            <div class="loading" id="loading">
+                <span class="spinner" aria-hidden="true"></span>
+                Looking up word...
             </div>
 
-            <div class="loading" id="loading">⏳ Loading...</div>
+            <section class="card" id="resultCard">
+                <figure class="media">
+                    <img id="image" src="asset/images/no-image.jpg" alt="Vocabulary image" />
+                    <figcaption>Click image to enlarge</figcaption>
+                </figure>
 
-            <div class="card">
-                <img id="image" src="asset/images/no-image.jpg" alt="Vocabulary image" />
+                <div class="langs">
+                    <div class="tabs" role="tablist" aria-label="Languages">
+                        <button type="button" class="tab is-active" role="tab" id="tab-en" aria-selected="true" aria-controls="panel-en" onclick="switchTab('en')">
+                            English
+                        </button>
+                        <button type="button" class="tab" role="tab" id="tab-th" aria-selected="false" aria-controls="panel-th" onclick="switchTab('th')">
+                            Thai
+                        </button>
+                        <button type="button" class="tab" role="tab" id="tab-ja" aria-selected="false" aria-controls="panel-ja" onclick="switchTab('ja')">
+                            Japanese
+                        </button>
+                    </div>
 
-                <div class="lang">
-                    <b>ภาษาไทย:</b> <span id="word_th"></span><br />
-                    คำอ่าน: <span id="phonetic_th"></span><br />
-                    ความหมาย: <span id="meaning_th"></span><br />
-                    <button onclick="speak('th')">🔊 ฟังภาษาไทย</button>
+                    <article class="lang lang-en is-active" role="tabpanel" id="panel-en" aria-labelledby="tab-en">
+                        <p class="word" id="word_en"></p>
+                        <dl>
+                            <div>
+                                <dt>Pronunciation</dt>
+                                <dd id="phonetic_en"></dd>
+                            </div>
+                            <div>
+                                <dt>Meaning</dt>
+                                <dd id="meaning_en"></dd>
+                            </div>
+                        </dl>
+                        <button type="button" class="btn btn-speak" onclick="speak('en')">Listen</button>
+                    </article>
+
+                    <article class="lang lang-th" role="tabpanel" id="panel-th" aria-labelledby="tab-th" hidden>
+                        <p class="word" id="word_th"></p>
+                        <dl>
+                            <div>
+                                <dt>Pronunciation</dt>
+                                <dd id="phonetic_th"></dd>
+                            </div>
+                            <div>
+                                <dt>Meaning</dt>
+                                <dd id="meaning_th"></dd>
+                            </div>
+                        </dl>
+                        <button type="button" class="btn btn-speak" onclick="speak('th')">Listen</button>
+                    </article>
+
+                    <article class="lang lang-ja" role="tabpanel" id="panel-ja" aria-labelledby="tab-ja" hidden>
+                        <p class="word" id="word_ja"></p>
+                        <dl>
+                            <div>
+                                <dt>Pronunciation</dt>
+                                <dd id="phonetic_ja"></dd>
+                            </div>
+                            <div>
+                                <dt>Meaning</dt>
+                                <dd id="meaning_ja"></dd>
+                            </div>
+                        </dl>
+                        <button type="button" class="btn btn-speak" onclick="speak('ja')">Listen</button>
+                    </article>
                 </div>
-
-                <hr />
-
-                <div class="lang">
-                    <b>English:</b> <span id="word_en"></span><br />
-                    Pronunciation: <span id="phonetic_en"></span><br />
-                    Meaning: <span id="meaning_en"></span><br />
-                    <button onclick="speak('en')">🔊 Listening</button>
-                </div>
-
-                <hr />
-
-                <div class="lang">
-                    <b>日本語:</b> <span id="word_ja"></span><br />
-                    読み方: <span id="phonetic_ja"></span><br />
-                    意味: <span id="meaning_ja"></span><br />
-                    <button onclick="speak('ja')">🔊 押して聞く</button>
-                </div>
-            </div>
+            </section>
         </div>
 
         <div id="imageModal" class="image-modal" onclick="closeImageModal()">

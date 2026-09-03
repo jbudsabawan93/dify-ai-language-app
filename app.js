@@ -55,7 +55,7 @@ async function search() {
     const word = document.getElementById("inputWord").value.trim();
     if (!word) return;
 
-    document.getElementById("loading").style.display = "block";
+    document.getElementById("loading").classList.add("show");
     document.getElementById("image").src = DEFAULT_IMAGE;
 
     try {
@@ -105,11 +105,25 @@ async function search() {
 
         document.getElementById("image").src = r.image || DEFAULT_IMAGE;
     } catch (err) {
-        alert(`เกิดข้อผิดพลาด: ${err.message}`);
+        alert(`Error: ${err.message}`);
         console.error(err);
     }
 
-    document.getElementById("loading").style.display = "none";
+    document.getElementById("loading").classList.remove("show");
+}
+
+function switchTab(lang) {
+    document.querySelectorAll(".tab").forEach((tab) => {
+        const active = tab.id === `tab-${lang}`;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+    });
+
+    document.querySelectorAll(".lang").forEach((panel) => {
+        const active = panel.id === `panel-${lang}`;
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+    });
 }
 
 function speak(lang) {
@@ -148,7 +162,7 @@ function closeImageModal() {
 
 function clearData() {
     document.getElementById("inputWord").value = "";
-    document.getElementById("loading").style.display = "none";
+    document.getElementById("loading").classList.remove("show");
     document.getElementById("image").src = DEFAULT_IMAGE;
 
     const textIds = [
@@ -169,6 +183,7 @@ function clearData() {
 
     closeImageModal();
     speechSynthesis.cancel();
+    switchTab("en");
     document.getElementById("inputWord").focus();
 }
 
